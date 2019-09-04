@@ -1,7 +1,7 @@
 <template>
   <div id="app">
+  <form name="Equipment" method="POST" data-netlify="true">
     <div class="container">
-
       <div class="row">
           <label>Your Name: <input type="text" name="name" /></label>   
       </div>
@@ -109,6 +109,7 @@
           <br/>
 
           <button
+            type="submit"
             class="btn btn-online-primary float-left"
           >
             Submit
@@ -116,6 +117,7 @@
       </div>
 
     </div>
+  </form>
   </div>
 </template>
 
