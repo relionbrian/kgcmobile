@@ -7,7 +7,7 @@
     <label>Your Name: <input type="text" name="name" /></label>   
   </p>
   <p>
-    <label>Your Email: <input type="email" name="email" /></label>
+    <label>Email: <input type="email" name="email" /></label>
   </p>
     <button type="submit" class="btn btn-online-primary float-left">Submit</button>
   </form> 
