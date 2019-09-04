@@ -1,8 +1,17 @@
 <template>
+
+
   <div id="app">
-  <form name="Equipment" method="POST" data-netlify="true">
-  
-    <!--<div class="container">-->
+    <form name="Equipment" method="POST" data-netlify="true">
+      <p>
+    <label>Your Name: <input type="text" name="name" /></label>   
+  </p>
+  <p>
+    <label>Your Email: <input type="email" name="email" /></label>
+  </p>
+    <button type="submit" class="btn btn-online-primary float-left">Submit</button>
+  </form> 
+  <!--
       <div class="row">
           <label>Customer: <input type="text" name="name" /></label>   
       </div>
@@ -10,7 +19,6 @@
           <label>Address: <textarea rows="4" cols="50"></textarea></label>
       </div>
 
-      <!--
       <div class="row">
        <table class="table">
             <thead>
@@ -111,13 +119,7 @@
     </div>
 
   -->
-            <button
-            type="submit"
-            class="btn btn-online-primary float-left"
-          >
-            Submit
-          </button>
-  </form>
+
   </div>
 </template>
 
