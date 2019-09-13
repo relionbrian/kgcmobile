@@ -3,16 +3,10 @@
     <div class="container">
 
       <div class="row">
-          <label>Your Name: <input type="text" name="name" /></label>   
+          <input type="text" placeholder='name' v-model="name" /> 
       </div>
       <div class="row">
-          <label>Your Email: <input type="email" name="email" /></label>
-      </div>
-      <div class="row">
-          <label>Your Role: <select name="role[]" multiple>
-          <option value="leader">Leader</option>
-          <option value="follower">Follower</option>
-          </select></label>
+          <input type="email" placeholder='email' v-model="email" />
       </div>
       <div class="row">
        <table class="table">
@@ -75,18 +69,16 @@
       </div>
       
       <div class="row">
-          <div class="col-12 mt-2">
+          <div class="col-11 mt-2">
           <h1> Customer Signature </h1>
-          <img v-show="!sigInputShow" v-bind:src="savedPNG" alt="Saved image png"/>
           <VueSignaturePad
-            v-show="sigInputShow"
             id="signature"
             width="100%"
-            height="300px"
+            height="150px"
             ref="signaturePad"
           />
         </div>
-        <div class="col-6 mt-2">
+        <div class="col-5 mt-2">
           <button
             class="btn btn-outline-secondary float-right"
             @click="clear"
@@ -96,23 +88,12 @@
         </div>
         <div class="col-6 mt-2">
           <button
-            v-show="sigInputShow"
             class="btn btn-outline-primary float-left"
-            @click="save"
-          >
-            Save
-          </button>
-        </div>
-
-          <br/>
-          <br/>
-          <br/>
-
-          <button
-            class="btn btn-online-primary float-left"
+            @click="submit"
           >
             Submit
           </button>
+        </div>
       </div>
 
     </div>
@@ -124,28 +105,15 @@ export default {
   name: 'App',
   data(){
     return {
+      name: '',
+      email: '',
       savedPNG: '',
-      sigInputShow: true,
       rows: [],
       }
   },
   methods: {
     clear() {
       this.$refs.signaturePad.clearSignature();
-      this.sigInputShow = true;
-    },
-    save() {
-      const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-      console.log(isEmpty);
-      console.log(data);
-      /*  isEmpty cannot be used in the if statement below....not sure why.  Need to troubleshoot. bl 9/3/19
-      
-      if isEmpty {
-      this.savedPNG = 'data:image/png;base64,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'
-      
-      }*/
-      this.savedPNG = data;
-      this.sigInputShow = false;
     },
     addRow() {
       var elem = document.createElement('tr');
@@ -155,10 +123,38 @@ export default {
          hrs: "",
       });
     },
-    
     removeElement(index) {
       this.rows.splice(index, 1);1
     },
+    submit: async function() {
+      // save signature
+      const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
+      this.savedPNG = data
+
+      // fetch params init
+      const { name, email, savedPNG } = this
+      const opts = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, savedPNG })
+      }
+      
+      // fetch workflow
+      // const response = await fetch('http://localhost:3000/form_submit', opts)
+      // if (response.ok){
+      //   const data = await response.json()
+      //   console.log(data)
+      // } else {
+      //   throw Error(response.statusText)
+      // }
+
+      //clear all fields
+      this.$refs.signaturePad.clearSignature()
+      this.name = ''
+      this.email = ''
+      this.savedPNG = ''
+      
+    }
   }
 };
 </script>
