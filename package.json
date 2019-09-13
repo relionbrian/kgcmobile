@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "request": "^2.88.0",
     "vue": "^2.6.10",
     "vue-signature-pad": "^1.1.14"
   },
