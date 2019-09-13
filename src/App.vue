@@ -97,7 +97,7 @@
         <div class="col-6 mt-2">
           <button
             class="btn btn-outline-primary float-left"
-            @click="save"
+            @click="submit"
           >
             Save
           </button>
@@ -143,7 +143,7 @@ export default {
       // save signature
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
       this.savedPNG = data
-
+      console.log(data);
       // fetch params init
       const { name, email, savedPNG } = this
       const opts = {
