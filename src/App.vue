@@ -1,13 +1,23 @@
 <template>
-  <div id="app">
-    <div class="container">
 
+
+  <div id="app">
+      <p>
+    <label>Your Name: <input type="text" name="name" /></label>   
+  </p>
+  <p>
+    <label>Email: <input type="email" name="email" /></label>
+  </p>
+    <button type="submit" class="btn btn-online-primary float-left">Submit</button>
+
+  
       <div class="row">
           <input type="text" placeholder='name' v-model="name" /> 
       </div>
       <div class="row">
           <input type="email" placeholder='email' v-model="email" />
       </div>
+
       <div class="row">
        <table class="table">
             <thead>
@@ -89,14 +99,23 @@
         <div class="col-6 mt-2">
           <button
             class="btn btn-outline-primary float-left"
-            @click="submit"
+            @click="save"
           >
-            Submit
+            Save
           </button>
         </div>
+
+          <br/>
+          <br/>
+          <br/>
+
+
       </div>
 
     </div>
+
+  -->
+
   </div>
 </template>
 
