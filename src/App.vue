@@ -9,8 +9,6 @@
     <label>Email: <input type="email" name="email" /></label>
   </p>
     <button type="submit" class="btn btn-online-primary float-left">Submit</button>
-
-  
       <div class="row">
           <input type="text" placeholder='name' v-model="name" /> 
       </div>
