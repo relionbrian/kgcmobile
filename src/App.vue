@@ -3,19 +3,20 @@
 
   <div id="app">
       <p>
-    <label>Your Name: <input type="text" name="name" /></label>   
+    <label>Your Name: <input type="name" name="name" id="name" ref="name" v-model="userData.name" /></label>   
   </p>
   <p>
-    <label>Email: <input type="email" name="email" /></label>
+    <label>Email: <input type="email" name="email" id="email" ref="email" v-model="userData.email" /></label>
   </p>
-    <button type="submit" class="btn btn-online-primary float-left">Submit</button>
-      <div class="row">
+<!--     <button type="submit" class="btn btn-online-primary float-left" @click="enter">Submit</button>
+ --><!--       <div class="row">
           <input type="text" placeholder='name' v-model="name" /> 
       </div>
       <div class="row">
           <input type="email" placeholder='email' v-model="email" />
-      </div>
-
+      </div> -->
+      <br>
+      <br>
       <div class="row">
        <table class="table">
             <thead>
@@ -97,7 +98,8 @@
         <div class="col-6 mt-2">
           <button
             class="btn btn-outline-primary float-left"
-            @click="submit"
+            @click="SubmitForm"
+            onClick="alert('Please wait until this operation has completed')"
           >
             Save
           </button>
@@ -114,11 +116,15 @@
 </template>
 
 <script>
+import axios from 'axios'
+var rows =0;
 export default {
   name: 'App',
   data(){
     return {
-      name: '',
+      userData: {
+        name:""
+      },
       email: '',
       savedPNG: '',
       rows: [],
@@ -130,27 +136,61 @@ export default {
     },
     addRow() {
       var elem = document.createElement('tr');
+      rows++;
       this.rows.push({
          equip: "",
          equipNo: "",
          hrs: "",
       });
     },
+    SubmitForm(){
+      const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
+      this.savedPNG = data
+      console.log(this.rows);
+      var RowData = this.rows
+      //console.log(data);
+      var name = this.userData.name
+      var email = this.userData.email
+      axios.post('https://nodeforward.localtunnel.me/api/v1/posts',{
+        body: {
+          userData : {
+            name : name,
+            email:email
+          },
+          InputData : {
+            RowInfo : RowData,
+            RowNum : rows,
+            Signature : data
+            
+
+
+          }
+        }
+      })
+      .then(response =>{})
+      .catch(e => {
+        console.log(e);
+      })
+      alert("Operation complete, you are free to leave")
+    },
     removeElement(index) {
-      this.rows.splice(index, 1);1
+      this.rows.splice(index, 1);
+      rows--;
     },
     submit: async function() {
+/*       console.log(this.userData.name);
+      console.log(this.userData.email); */
       // save signature
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
       this.savedPNG = data
-      console.log(data);
+      /* console.log(data); */
       // fetch params init
       const { name, email, savedPNG } = this
-      const opts = {
+      /* const opts = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, savedPNG })
-      }
+      } */
       
       // fetch workflow
       // const response = await fetch('http://localhost:3000/form_submit', opts)
