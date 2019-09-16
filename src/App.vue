@@ -146,7 +146,6 @@ export default {
     SubmitForm(){
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
       this.savedPNG = data
-      console.log(this.rows);
       var RowData = this.rows
       //console.log(data);
       var name = this.userData.name
