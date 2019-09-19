@@ -1,197 +1,300 @@
 <template>
   <div id="app">
-    <p>
-      <label>Your Name: <input type="name" name="name" id="name" ref="name" v-model="userData.name" /></label>   
-    </p>
-    <p>
-      <label>Email: <input type="email" name="email" id="email" ref="email" v-model="userData.email" /></label>
-    </p>
-<!--     <button type="submit" class="btn btn-online-primary float-left" @click="enter">Submit</button>
- --><!--       <div class="row">
-          <input type="text" placeholder='name' v-model="name" /> 
-      </div>
-      <div class="row">
-          <input type="email" placeholder='email' v-model="email" />
-      </div> -->
-      <br>
-      <br>
-      <div class="row">
-       <table class="table">
-          <thead>
-              <tr>
-                  <td><strong>KGC,LLP Equipment</strong></td>
-                  <td><strong>Eqpt#</strong></td>
-                  <td><strong>Hrs Used</strong></td>
-                  <td></td>
-              </tr>
-          </thead>
-          <tbody>
-              <tr v-for="(row, index) in rows">
-                  <td><select v-model="row.equip" name="equipment">
-                    <option value="Truck & Tools">Truck & Tools</option>
-                    <option value="Backhoe">Backhoe</option>
-                    <option value="Drill Rig - Tool Truck">Drill Rig - Tool Truck</option>
-                    <option value="Drill Rig (Foundation)">Drill Rig (Foundation)</option>
-                    <option value="Dump Truck (Bobtail)">Dump Truck (Bobtail)</option>
-                    <option value="Dump Truck (Super 10)">Dump Truck (Super 10)</option>
-                    <option value="Well - Tool Truck">Well - Tool Truck</option>
-                    <option value="Well - Drill / Wtr Trk / Mud">Well - Drill / Wtr Trk / Mud</option>
-                    <option value="Skid Steer">Skid Steer</option>
-                    <option value="Mini-Excavator">Mini-Excavator</option>
-                    <option value="Skip Loader">Skip Loader</option>
-                    <option value="Compactor (Upright)">Compactor (Upright)</option>
-                    <option value="Compactor (Ride-on)">Compactor (Ride-on)</option>
-                    <option value="Compressor Truck (Demo)">Compressor Truck (Demo)</option>
-                    <option value="Compressor (Towable)">Compressor (Towable)</option>
-                    <option value="Forklift (Reach) 5K">Forklift (Reach) 5K</option>
-                    <option value="Forklift (Reach) 10K">Forklift (Reach) 10K</option>
-                    <option value="Forklift (Warehouse)">Forklift (Warehouse)</option>
-                    <option value="Generator / Welder">Generator / Welder</option>
-                    <option value="Scissor Lift">Scissor Lift</option>
-                    <option value="Trencher (Ride-on)">Trencher (Ride-on)</option>
-                    <option value="Trencher (Walk Behind)">Trencher (Walk Behind)</option>
-                    <option value="Water Trailer">Water Trailer</option>
-                    <option value="Water Truck (2000 gal.)">Water Truck (2000 gal.)</option>
-                    <option value="Development Rig">Development Rig</option>
-                    <option value="Rail Rig">Rail Rig</option>
-                    <option value="Welding Truck">Welding Truck</option>
-                    <option value="Compressor (Small)">Compressor (Small)</option>
-                    <option value="P&D (Portal to Portal)">P&D (Portal to Portal)</option>
-                  </select></td>
-                  <td><input type="text" v-model="row.equipNo"></td>
-                  <td><input type="text" v-model="row.hrs"></td>
-                  <td>
-                      <button v-on:click="removeElement(index);" class="btn btn-outline-secondary" style="cursor: pointer">Remove</button>
-                  </td>
-              </tr>
-              <tr>
-                <button class="btn btn-outline-primary" @click="addRow">Add more</button>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="row">
-          <div class="col-11 mt-2">
-          <h1> Customer Signature </h1>
-          <VueSignaturePad
-            id="signature"
-            width="100%"
-            height="150px"
-            ref="signaturePad"
-          />
+    <div class="row mt-2 ml-0 mr-0">
+      <div class="input-group col-12 mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Name</span>
         </div>
-        <div class="col-5 mt-2">
-          <button
-            class="btn btn-outline-secondary float-right"
-            @click="clear"
-          >
-            Clear
-          </button>
+        <input
+          type="name"
+          name="name"
+          id="name"
+          ref="name"
+          v-model="userData.name"
+          placeholder="Name"
+          class="form-control"
+        >
+      </div>
+      <div class="input-group col-12 mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Email</span>
         </div>
-        <div class="col-6 mt-2">
-          <button
-            class="btn btn-outline-primary float-left"
-            @click="submitForm"
+        <input
+          type="email"
+          name="email"
+          id="email"
+          ref="email"
+          v-model="userData.email"
+          placeholder="Email"
+          class="form-control"
+          aria-describedby="emailHelp"
+        >
+      </div>
+      <div class="custom-control custom-radio ml-3">
+        <input type="radio" class="custom-control-input" id="contract" name="billing">
+        <label class="custom-control-label" for="contract">Contract</label>
+      </div>
+      <div class="custom-control custom-radio ml-3">
+        <input type="radio" class="custom-control-input" id="tm" name="billing">
+        <label class="custom-control-label" for="tm">Time & Material</label>
+      </div>
+    </div>
+
+    <br>
+
+    <!--Worker card group -->
+    <div class="row ml-3">
+      <div class="col12">
+        <h3>Workers</h3>
+      </div>
+    </div>
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(workerRow, index) in workerRows">
+      <div class="card-body">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Name</span>
+          </div>
+          <input type="text" class="form-control" v-model="workerRow.name" placeholder="Name">
+        </div>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Class</span>
+          </div>
+          <input type="text" class="form-control" v-model="workerRow.class" placeholder="Class">
+        </div>
+        <div class="custom-control custom-checkbox mb-2">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="travel"
+            v-model="workerRow.travel"
           >
-            Save
-          </button>
+          <label class="custom-control-label" for="travel">Travel</label>
+        </div>
+        <div class="custom-control custom-checkbox mb-2">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="perdiem"
+            v-model="workerRow.perdiem"
+          >
+          <label class="custom-control-label" for="perdiem">Per Diem</label>
         </div>
       </div>
     </div>
+    <div class="row ml-0">
+      <div class="col-12">
+        <button @click="addWorkerRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
+        <button
+          @click="removeWorkerRow(index);"
+          class="btn btn-outline-secondary ml-2"
+          style="cursor: pointer"
+        >-</button>
+      </div>
+    </div>
+
+    <br>
+
+    <!--Equipment card group-->
+    <div class="row ml-3">
+      <div class="col12">
+        <h3>Equipment</h3>
+      </div>
+    </div>
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(row, index) in rows">
+      <div class="card-body">
+        <div class="mb-2">
+          <select v-model="row.equip" name="equipment" class="browser-default custom-select">
+            <option value selected disabled hidden>---Select Equipment---</option>
+            <option value="Truck & Tools">Truck & Tools</option>
+            <option value="Backhoe">Backhoe</option>
+            <option value="Drill Rig - Tool Truck">Drill Rig - Tool Truck</option>
+            <option value="Drill Rig (Foundation)">Drill Rig (Foundation)</option>
+            <option value="Dump Truck (Bobtail)">Dump Truck (Bobtail)</option>
+            <option value="Dump Truck (Super 10)">Dump Truck (Super 10)</option>
+            <option value="Well - Tool Truck">Well - Tool Truck</option>
+            <option value="Well - Drill / Wtr Trk / Mud">Well - Drill / Wtr Trk / Mud</option>
+            <option value="Skid Steer">Skid Steer</option>
+            <option value="Mini-Excavator">Mini-Excavator</option>
+            <option value="Skip Loader">Skip Loader</option>
+            <option value="Compactor (Upright)">Compactor (Upright)</option>
+            <option value="Compactor (Ride-on)">Compactor (Ride-on)</option>
+            <option value="Compressor Truck (Demo)">Compressor Truck (Demo)</option>
+            <option value="Compressor (Towable)">Compressor (Towable)</option>
+            <option value="Forklift (Reach) 5K">Forklift (Reach) 5K</option>
+            <option value="Forklift (Reach) 10K">Forklift (Reach) 10K</option>
+            <option value="Forklift (Warehouse)">Forklift (Warehouse)</option>
+            <option value="Generator / Welder">Generator / Welder</option>
+            <option value="Scissor Lift">Scissor Lift</option>
+            <option value="Trencher (Ride-on)">Trencher (Ride-on)</option>
+            <option value="Trencher (Walk Behind)">Trencher (Walk Behind)</option>
+            <option value="Water Trailer">Water Trailer</option>
+            <option value="Water Truck (2000 gal.)">Water Truck (2000 gal.)</option>
+            <option value="Development Rig">Development Rig</option>
+            <option value="Rail Rig">Rail Rig</option>
+            <option value="Welding Truck">Welding Truck</option>
+            <option value="Compressor (Small)">Compressor (Small)</option>
+            <option value="P&D (Portal to Portal)">P&D (Portal to Portal)</option>
+          </select>
+        </div>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">#</span>
+          </div>
+          <input
+            type="number"
+            class="form-control"
+            v-model="row.equipNo"
+            placeholder="Equipment Number"
+          >
+        </div>
+        <div class="input-group mb-2">
+          <input type="number" class="form-control" v-model="row.hrs" placeholder="Hours Used">
+          <div class="input-group-append">
+            <span class="input-group-text">Hrs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row ml-0">
+      <div class="col-12">
+        <button @click="addRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
+        <button
+          @click="removeEquipRow(index);"
+          class="btn btn-outline-secondary ml-2"
+          style="cursor: pointer"
+        >-</button>
+      </div>
+    </div>
+
+    <br>
+
+    <!--Signature box-->
+    <div class="row ml-0 mr-0">
+      <div class="col-12">
+        <h3>Customer Signature</h3>
+        <VueSignaturePad id="signature" width="100%" height="150px" ref="signaturePad"/>
+      </div>
+      <div class="col-9 mt-2">
+        <button class="btn btn-block btn-primary" @click="submitForm">Save</button>
+      </div>
+      <div class="col-3 mt-2">
+        <button class="btn btn-block btn-outline-secondary" @click="clear">Clear</button>
+      </div>
+    </div>
+
+    <br>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
-var rows =0;
+import axios from "axios";
+var rows = 1;
+var workerRows = 1;
 
 export default {
-  name: 'App',
-  data(){
+  name: "App",
+  data() {
     return {
       userData: {
-        name:""
+        name: "",
+        email: "",
+        billing: ""
       },
-      email: '',
-      savedPNG: '',
+      savedPNG: "",
       rows: [],
-      }
+      workerRows: []
+    };
   },
   methods: {
     clear() {
       this.$refs.signaturePad.clearSignature();
     },
     addRow() {
-      var elem = document.createElement('tr');
-      rows++;
+      //var elem = document.createElement("tr");
+      rows += 1;
       this.rows.push({
-         equip: "",
-         equipNo: "",
-         hrs: "",
+        equip: "",
+        equipNo: "",
+        hrs: ""
       });
     },
-    submitForm(){
+    addWorkerRow() {
+      workerRows += 1;
+      this.workerRows.push({
+        travel: "",
+        perdiem: "",
+        name: "",
+        class: "",
+        hrs: ""
+      });
+    },
+    submitForm() {
       var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       this.savedPNG = data;
       var RowData = this.rows;
       var name = this.userData.name;
       var email = this.userData.email;
-      axios.post('http://192.168.144.241:1337/api/v1/posts',{
-        body: {
-          userData : {
-            name : name,
-            email: email
-          },
-          InputData : {
-            RowInfo : RowData,
-            RowNum : rows,
-            Signature : data
+      axios
+        .post("http://192.168.144.241:1337/api/v1/posts", {
+          body: {
+            userData: {
+              name: name,
+              email: email
+            },
+            InputData: {
+              RowInfo: RowData,
+              RowNum: rows,
+              Signature: data
+            }
           }
-        }
-      })
-      .then(response => {
-        alert("Form received.  Thank you!")
-      })
-      .catch(error => {
-        alert(error);
-      })
+        })
+        .then(response => {
+          alert("Form received.  Thank you!");
+        })
+        .catch(error => {
+          alert(error);
+        });
     },
-    removeElement(index) {
+    removeEquipRow(index) {
       this.rows.splice(index, 1);
-      rows--;
+      rows = -1;
     },
+    removeWorkerRow(index) {
+      this.workerRows.splice(index, 1);
+      workerRows = -1;
+    }
 
-  // submitForm: async function() {
-  //     // save signature
-  //     const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
-  //     this.savedPNG = data
-  //     // fetch params init
-  //     const { name, email, savedPNG } = this
-  //     const opts = {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ name, email, savedPNG })
-  //     }
-      
-  //     //fetch
-  //     const response = await fetch('http://localhost:3000/form_submit', opts)
-  //     if (response.ok){
-  //       const data = await response.json()
-  //       alert("Form received.  Thank you!");
-  //     } else {
-  //       throw Error(response.statusText){
-  //       alert(Error);
-  //     }
+    // submitForm: async function() {
+    //     // save signature
+    //     const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
+    //     this.savedPNG = data
+    //     // fetch params init
+    //     const { name, email, savedPNG } = this
+    //     const opts = {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ name, email, savedPNG })
+    //     }
 
-  //     //clear all fields
-  //     this.$refs.signaturePad.clearSignature()
-  //     this.name = ''
-  //     this.email = ''
-  //     this.savedPNG = ''
-    
-  // }
+    //     //fetch
+    //     const response = await fetch('http://localhost:3000/form_submit', opts)
+    //     if (response.ok){
+    //       const data = await response.json()
+    //       alert("Form received.  Thank you!");
+    //     } else {
+    //       throw Error(response.statusText){
+    //       alert(Error);
+    //     }
+
+    //     //clear all fields
+    //     this.$refs.signaturePad.clearSignature()
+    //     this.name = ''
+    //     this.email = ''
+    //     this.savedPNG = ''
+
+    // }
   }
-
 };
 </script>
 
