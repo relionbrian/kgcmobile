@@ -1,33 +1,32 @@
 <template>
   <div id="app">
     <div class="row mt-2 ml-0 mr-0">
-      <div class="input-group col-12 mb-2">
+      <div class="input-group col-11 mb-2">
         <div class="input-group-prepend">
-          <span class="input-group-text">Name</span>
+          <span class="input-group-text">Customer</span>
+        </div>
+        <input type="text" v-model="userData.customer" placeholder="Name" class="form-control">
+      </div>
+      <div class="input-group col-12 mb-2 mr-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Address 1</span>
         </div>
         <input
-          type="name"
-          name="name"
-          id="name"
-          ref="name"
-          v-model="userData.name"
-          placeholder="Name"
+          type="text"
+          v-model="userData.address1"
+          placeholder="Street Address"
           class="form-control"
         >
       </div>
-      <div class="input-group col-12 mb-2">
+      <div class="input-group col-12 mb-2 mr-2">
         <div class="input-group-prepend">
-          <span class="input-group-text">Email</span>
+          <span class="input-group-text">Address 2</span>
         </div>
         <input
-          type="email"
-          name="email"
-          id="email"
-          ref="email"
-          v-model="userData.email"
-          placeholder="Email"
+          type="text"
+          v-model="userData.address2"
+          placeholder="City, State, Zip"
           class="form-control"
-          aria-describedby="emailHelp"
         >
       </div>
       <div class="custom-control custom-radio ml-3">
@@ -234,20 +233,17 @@ export default {
     },
     submitForm() {
       console.log(this.workerRows);
-      var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+      let { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       this.savedPNG = data;
-      var RowData = this.rows;
-      var name = this.userData.name;
-      var email = this.userData.email;
-      var WorkerData = this.workerRows;
-      var billing = this.userData.billing;
+      let RowData = this.rows;
       axios
         .post("https://nodeforward.localtunnel.me/api/v1/posts", {
           body: {
             userData: {
-              name: name,
-              email: email,
-              billing: billing
+              customer: this.userData.customer,
+              address1: this.userData.address1,
+              address2: this.userData.address2,
+              billing: this.userData.billing
             },
             InputData: {
               EquipmentRowInfo: RowData,
