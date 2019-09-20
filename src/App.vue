@@ -31,11 +31,25 @@
         >
       </div>
       <div class="custom-control custom-radio ml-3">
-        <input type="radio" class="custom-control-input" id="contract" name="billing">
+        <input
+          type="radio"
+          class="custom-control-input"
+          id="contract"
+          name="billing"
+          value="contract"
+          v-model="userData.billing"
+        >
         <label class="custom-control-label" for="contract">Contract</label>
       </div>
       <div class="custom-control custom-radio ml-3">
-        <input type="radio" class="custom-control-input" id="tm" name="billing">
+        <input
+          type="radio"
+          class="custom-control-input"
+          id="tm"
+          name="billing"
+          value="tm"
+          v-model="userData.billing"
+        >
         <label class="custom-control-label" for="tm">Time & Material</label>
       </div>
     </div>
@@ -62,23 +76,13 @@
           </div>
           <input type="text" class="form-control" v-model="workerRow.class" placeholder="Class">
         </div>
-        <div class="custom-control custom-checkbox mb-2">
-          <input
-            type="checkbox"
-            class="custom-control-input"
-            id="travel"
-            v-model="workerRow.travel"
-          >
-          <label class="custom-control-label" for="travel">Travel</label>
+        <div class="mb-2 ml-4">
+          <input type="checkbox" class="form-check-input" v-model="workerRow.travel">
+          <label class="form-check-label">Travel</label>
         </div>
-        <div class="custom-control custom-checkbox mb-2">
-          <input
-            type="checkbox"
-            class="custom-control-input"
-            id="perdiem"
-            v-model="workerRow.perdiem"
-          >
-          <label class="custom-control-label" for="perdiem">Per Diem</label>
+        <div class="mb-2 ml-4">
+          <input type="checkbox" class="form-check-input" v-model="workerRow.perdiem">
+          <label class="form-check-label">Per Diem</label>
         </div>
       </div>
     </div>
@@ -101,10 +105,10 @@
         <h3>Equipment</h3>
       </div>
     </div>
-    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(row, index) in rows">
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(equipRow, index) in equipRows">
       <div class="card-body">
         <div class="mb-2">
-          <select v-model="row.equip" name="equipment" class="browser-default custom-select">
+          <select v-model="equipRow.equip" name="equipment" class="browser-default custom-select">
             <option value selected disabled hidden>---Select Equipment---</option>
             <option value="Truck & Tools">Truck & Tools</option>
             <option value="Backhoe">Backhoe</option>
@@ -144,12 +148,12 @@
           <input
             type="number"
             class="form-control"
-            v-model="row.equipNo"
+            v-model="equipRow.equipNo"
             placeholder="Equipment Number"
           >
         </div>
         <div class="input-group mb-2">
-          <input type="number" class="form-control" v-model="row.hrs" placeholder="Hours Used">
+          <input type="number" class="form-control" v-model="equipRow.hrs" placeholder="Hours Used">
           <div class="input-group-append">
             <span class="input-group-text">Hrs</span>
           </div>
@@ -158,7 +162,7 @@
     </div>
     <div class="row ml-0">
       <div class="col-12">
-        <button @click="addRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
+        <button @click="addEquipRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
         <button
           @click="removeEquipRow(index);"
           class="btn btn-outline-secondary ml-2"
@@ -182,15 +186,14 @@
         <button class="btn btn-block btn-outline-secondary" @click="clear">Clear</button>
       </div>
     </div>
-
     <br>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-var rows = 1;
-var workerRows = 1;
+//var rows = 1;
+//var workerRows = 1;
 
 export default {
   name: "App",
@@ -202,7 +205,7 @@ export default {
         billing: ""
       },
       savedPNG: "",
-      rows: [],
+      equipRows: [],
       workerRows: []
     };
   },
@@ -210,17 +213,17 @@ export default {
     clear() {
       this.$refs.signaturePad.clearSignature();
     },
-    addRow() {
+    addEquipRow() {
       //var elem = document.createElement("tr");
-      rows += 1;
-      this.rows.push({
+      //rows += 1;
+      this.equipRows.push({
         equip: "",
         equipNo: "",
         hrs: ""
       });
     },
     addWorkerRow() {
-      workerRows += 1;
+      //workerRows += 1;
       this.workerRows.push({
         travel: "",
         perdiem: "",
@@ -230,21 +233,25 @@ export default {
       });
     },
     submitForm() {
+      console.log(this.workerRows);
       var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       this.savedPNG = data;
       var RowData = this.rows;
       var name = this.userData.name;
       var email = this.userData.email;
+      var WorkerData = this.workerRows;
+      var billing = this.userData.billing;
       axios
-        .post("http://192.168.144.241:1337/api/v1/posts", {
+        .post("https://nodeforward.localtunnel.me/api/v1/posts", {
           body: {
             userData: {
               name: name,
-              email: email
+              email: email,
+              billing: billing
             },
             InputData: {
-              RowInfo: RowData,
-              RowNum: rows,
+              EquipmentRowInfo: RowData,
+              WorkerRowInfo: WorkerData,
               Signature: data
             }
           }
@@ -257,8 +264,8 @@ export default {
         });
     },
     removeEquipRow(index) {
-      this.rows.splice(index, 1);
-      rows = -1;
+      this.equipRows.splice(index, 1);
+      equipRows = -1;
     },
     removeWorkerRow(index) {
       this.workerRows.splice(index, 1);
