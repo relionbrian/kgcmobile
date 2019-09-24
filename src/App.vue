@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div class="row mt-2 ml-0 mr-0">
-      <div class="input-group col-11 mb-2">
+      <div class="input-group col-12 mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Customer</span>
         </div>
         <input type="text" v-model="userData.customer" placeholder="Name" class="form-control">
       </div>
-      <div class="input-group col-11 mb-2">
+      <div class="input-group col-12 mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Address 1</span>
         </div>
@@ -18,7 +18,7 @@
           class="form-control"
         >
       </div>
-      <div class="input-group col-11 mb-2">
+      <div class="input-group col-12 mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Address 2</span>
         </div>
@@ -61,7 +61,10 @@
         <h3>Workers</h3>
       </div>
     </div>
-    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(workerRow, index) in workerRows">
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(workerRow,index) in workerRows">
+      <div>
+          <p>{{index}}</p>
+      </div>
       <div class="card-body">
         <div class="input-group mb-2">
           <div class="input-group-prepend">
@@ -83,6 +86,7 @@
           <input type="checkbox" class="form-check-input" v-model="workerRow.perdiem">
           <label class="form-check-label">Per Diem</label>
         </div>
+
       </div>
     </div>
     <div class="row ml-0">
@@ -104,7 +108,10 @@
         <h3>Equipment</h3>
       </div>
     </div>
-    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(equipRow, index) in equipRows">
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(equipRow,index) in equipRows">
+      <div>
+          <p>{{index}}</p>
+      </div>
       <div class="card-body">
         <div class="mb-2">
           <select v-model="equipRow.equip" name="equipment" class="browser-default custom-select">
@@ -237,7 +244,7 @@ export default {
       this.savedPNG = data;
       let RowData = this.rows;
       axios
-        .post("https://nodeforward.localtunnel.me/api/v1/posts", {
+        .post("http://corp.kgcinc.com:3000/api/v1/posts", {
           body: {
             userData: {
               customer: this.userData.customer,
