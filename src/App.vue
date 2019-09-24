@@ -242,7 +242,7 @@ export default {
       var email = this.userData.email;
       var WorkerData = this.workerRows;
       var billing = this.userData.billing;
-      axios.post('http://corp.kgcinc.com/form_submit:3000', {
+      axios.post('http://corp.kgcinc.com:3000/api/v1/posts', {
         //change
           body: {
             userData: {
@@ -261,6 +261,7 @@ export default {
           alert("Form received.  Thank you!");
         })
         .catch(error => {
+          //alert('sigh');
           alert(error);
         });
     },
