@@ -242,7 +242,7 @@ export default {
       var email = this.userData.email;
       var WorkerData = this.workerRows;
       var billing = this.userData.billing;
-      axios.post('http://108.169.70.2/form_submit:3000', {
+      axios.post('http://corp.kgcinc.com/form_submit:3000', {
           body: {
             userData: {
               name: name,
