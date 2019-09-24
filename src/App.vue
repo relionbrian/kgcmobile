@@ -1,32 +1,33 @@
 <template>
   <div id="app">
     <div class="row mt-2 ml-0 mr-0">
-      <div class="input-group col-11 mb-2">
+      <div class="input-group col-12 mb-2">
         <div class="input-group-prepend">
-          <span class="input-group-text">Customer</span>
-        </div>
-        <input type="text" v-model="userData.customer" placeholder="Name" class="form-control">
-      </div>
-      <div class="input-group col-12 mb-2 mr-2">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Address 1</span>
+          <span class="input-group-text">Name</span>
         </div>
         <input
-          type="text"
-          v-model="userData.address1"
-          placeholder="Street Address"
+          type="name"
+          name="name"
+          id="name"
+          ref="name"
+          v-model="userData.name"
+          placeholder="Name"
           class="form-control"
         >
       </div>
-      <div class="input-group col-12 mb-2 mr-2">
+      <div class="input-group col-12 mb-2">
         <div class="input-group-prepend">
-          <span class="input-group-text">Address 2</span>
+          <span class="input-group-text">Email</span>
         </div>
         <input
-          type="text"
-          v-model="userData.address2"
-          placeholder="City, State, Zip"
+          type="email"
+          name="email"
+          id="email"
+          ref="email"
+          v-model="userData.email"
+          placeholder="Email"
           class="form-control"
+          aria-describedby="emailHelp"
         >
       </div>
       <div class="custom-control custom-radio ml-3">
@@ -35,7 +36,7 @@
           class="custom-control-input"
           id="contract"
           name="billing"
-          value="contract"
+          value="Contract"
           v-model="userData.billing"
         >
         <label class="custom-control-label" for="contract">Contract</label>
@@ -75,13 +76,13 @@
           </div>
           <input type="text" class="form-control" v-model="workerRow.class" placeholder="Class">
         </div>
-        <div class="mb-2 ml-4">
-          <input type="checkbox" class="form-check-input" v-model="workerRow.travel">
-          <label class="form-check-label">Travel</label>
+        <div class="mb-2">
+          <input type="checkbox" v-model="workerRow.travel">
+          <label>&nbsp;Travel</label>
         </div>
-        <div class="mb-2 ml-4">
-          <input type="checkbox" class="form-check-input" v-model="workerRow.perdiem">
-          <label class="form-check-label">Per Diem</label>
+        <div class="mb-2">
+          <input type="checkbox" value="true" v-model="workerRow.perdiem">
+          <label>&nbsp;Per Diem</label>
         </div>
       </div>
     </div>
@@ -104,10 +105,10 @@
         <h3>Equipment</h3>
       </div>
     </div>
-    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(equipRow, index) in equipRows">
+    <div class="card mb-2 ml-3" style="width: 18rem;" v-for="(row, index) in rows">
       <div class="card-body">
         <div class="mb-2">
-          <select v-model="equipRow.equip" name="equipment" class="browser-default custom-select">
+          <select v-model="row.equip" name="equipment" class="browser-default custom-select">
             <option value selected disabled hidden>---Select Equipment---</option>
             <option value="Truck & Tools">Truck & Tools</option>
             <option value="Backhoe">Backhoe</option>
@@ -147,12 +148,12 @@
           <input
             type="number"
             class="form-control"
-            v-model="equipRow.equipNo"
+            v-model="row.equipNo"
             placeholder="Equipment Number"
           >
         </div>
         <div class="input-group mb-2">
-          <input type="number" class="form-control" v-model="equipRow.hrs" placeholder="Hours Used">
+          <input type="number" class="form-control" v-model="row.hrs" placeholder="Hours Used">
           <div class="input-group-append">
             <span class="input-group-text">Hrs</span>
           </div>
@@ -161,7 +162,7 @@
     </div>
     <div class="row ml-0">
       <div class="col-12">
-        <button @click="addEquipRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
+        <button @click="addRow" class="btn btn-outline-primary" style="cursor: pointer">+</button>
         <button
           @click="removeEquipRow(index);"
           class="btn btn-outline-secondary ml-2"
@@ -185,6 +186,7 @@
         <button class="btn btn-block btn-outline-secondary" @click="clear">Clear</button>
       </div>
     </div>
+
     <br>
   </div>
 </template>
@@ -204,7 +206,7 @@ export default {
         billing: ""
       },
       savedPNG: "",
-      equipRows: [],
+      rows: [],
       workerRows: []
     };
   },
@@ -212,10 +214,10 @@ export default {
     clear() {
       this.$refs.signaturePad.clearSignature();
     },
-    addEquipRow() {
+    addRow() {
       //var elem = document.createElement("tr");
       //rows += 1;
-      this.equipRows.push({
+      this.rows.push({
         equip: "",
         equipNo: "",
         hrs: ""
@@ -233,17 +235,19 @@ export default {
     },
     submitForm() {
       console.log(this.workerRows);
-      let { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+      var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       this.savedPNG = data;
-      let RowData = this.rows;
-      axios
-        .post("https://nodeforward.localtunnel.me/api/v1/posts", {
+      var RowData = this.rows;
+      var name = this.userData.name;
+      var email = this.userData.email;
+      var WorkerData = this.workerRows;
+      var billing = this.userData.billing;
+      axios.post('http://108.169.70.2/form_submit:3000', {
           body: {
             userData: {
-              customer: this.userData.customer,
-              address1: this.userData.address1,
-              address2: this.userData.address2,
-              billing: this.userData.billing
+              name: name,
+              email: email,
+              billing: billing
             },
             InputData: {
               EquipmentRowInfo: RowData,
@@ -260,20 +264,19 @@ export default {
         });
     },
     removeEquipRow(index) {
-      this.equipRows.splice(index, 1);
-      equipRows = -1;
+      this.rows.splice(index, 1);
+      rows = -1;
     },
     removeWorkerRow(index) {
       this.workerRows.splice(index, 1);
       workerRows = -1;
-    }
-
+    },
     // submitForm: async function() {
     //     // save signature
-    //     const { isEmpty, data } = this.$refs.signaturePad.saveSignature()
-    //     this.savedPNG = data
+    //     const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+    //     this.savedPNG = data;
     //     // fetch params init
-    //     const { name, email, savedPNG } = this
+    //     const { name, email, savedPNG } = this;
     //     const opts = {
     //         method: 'POST',
     //         headers: { 'Content-Type': 'application/json' },
@@ -281,13 +284,12 @@ export default {
     //     }
 
     //     //fetch
-    //     const response = await fetch('http://localhost:3000/form_submit', opts)
+    //     const response = await fetch('http://corp.kgcinc.com:3000/form_submit', opts);
     //     if (response.ok){
     //       const data = await response.json()
     //       alert("Form received.  Thank you!");
     //     } else {
-    //       throw Error(response.statusText){
-    //       alert(Error);
+    //       alert(response.statusText);
     //     }
 
     //     //clear all fields
